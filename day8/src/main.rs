@@ -34,6 +34,31 @@ fn solve_part_1(input: &str) -> u32 {
     3 * escape_hex + escape_slash + escape_quote + number_quotes
 }
 
+fn solve_part_2(input: &str) -> u32 {
+    let mut escape_slash = 0u32;
+    let mut escape_quote = 0u32;
+    let mut number_quotes = 0u32;
+    
+    for line in input.trim().lines() {
+        number_quotes += 2;
+        let chars: Vec<char> = line.trim().chars().collect();
+        let mut i: usize = 0usize;
+        while i < chars.len() { 
+            let mut pattern: String = String::new();
+            pattern.push(chars[i]);
+            if pattern == String::from("\\") {
+                escape_slash += 1;
+            }
+            if pattern == String::from("\"") {
+                escape_quote += 1;
+            }
+            i += 1;
+        }
+    }
+    escape_slash + escape_quote + number_quotes
+}
+
 fn main() {
-    println!("{}", solve_part_1(INPUT));
+    println!("Answer part 1: {}", solve_part_1(INPUT));
+    println!("Answer part 2: {}", solve_part_2(INPUT));
 }
