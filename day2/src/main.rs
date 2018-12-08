@@ -69,5 +69,6 @@ fn main() -> Result<(), ParseIntError> {
 
     println!("Answer part 1: {}", solve_part_1(&data));
     println!("Answer part 2: {}", solve_part_2(&data));
+    
     Ok(())
 }
