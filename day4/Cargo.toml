@@ -1,0 +1,8 @@
+[package]
+name = "day4"
+version = "0.1.0"
+authors = ["stefan"]
+edition = "2018"
+
+[dependencies]
+rust-crypto = "0.2.36"
