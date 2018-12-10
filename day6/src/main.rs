@@ -8,7 +8,7 @@ const INPUT: &str = include_str!("../input.txt");
 type Pair = (usize,usize);
 
 struct Instruction {
-    // 0 === turn off, 1 == turn on, 2 == toggle
+    // 0 == turn off, 1 == turn on, 2 == toggle
     action: u8,
     start: Pair,
     end: Pair,
