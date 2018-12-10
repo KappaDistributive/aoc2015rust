@@ -1,4 +1,8 @@
-use std::string::String;
+extern crate regex;
+#[macro_use]
+extern crate lazy_static;
+
+
 const INPUT: &str = include_str!("../input.txt");
 const VOWELS: [char;5] = ['a','e','i','o','u'];
 

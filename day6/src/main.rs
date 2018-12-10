@@ -2,7 +2,6 @@ extern crate regex;
 #[macro_use]
 extern crate lazy_static;
 
-
 use regex::Regex;
 const INPUT: &str = include_str!("../input.txt");
 
