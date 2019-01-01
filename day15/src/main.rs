@@ -1,26 +1,28 @@
 #[macro_use]
 extern crate lazy_static;
 use regex::Regex;
+use integer_partitions::Partitions;
+
 const INPUT: &str = include_str!("../input.txt");
 
 #[derive(Debug)]
 struct Ingredient {
     name: String,
-    capacity: i32,
-    durability: i32,
-    flavor: i32,
-    texture: i32,
-    calories: i32,
+    capacity: i64,
+    durability: i64,
+    flavor: i64,
+    texture: i64,
+    calories: i64,
 }
 
 impl Ingredient {
     fn from_data(
         name: String,
-        capacity: i32,
-        durability: i32,
-        flavor: i32,
-        texture: i32,
-        calories: i32,
+        capacity: i64,
+        durability: i64,
+        flavor: i64,
+        texture: i64,
+        calories: i64,
     ) -> Self {
         Ingredient {
             name,
@@ -44,21 +46,21 @@ fn format_input(input_str: &str) -> Vec<Ingredient> {
                 let name: String = cap
                     .name("name")
                     .map_or(String::from(""), |x| String::from(x.as_str()));
-                let capacity: i32 = cap
+                let capacity: i64 = cap
                     .name("capacity")
-                    .map_or(0i32, |x| x.as_str().parse::<i32>().unwrap());
-                let durability: i32 = cap
+                    .map_or(0i64, |x| x.as_str().parse::<i64>().unwrap());
+                let durability: i64 = cap
                     .name("durability")
-                    .map_or(0i32, |x| x.as_str().parse::<i32>().unwrap());
-                let flavor: i32 = cap
+                    .map_or(0i64, |x| x.as_str().parse::<i64>().unwrap());
+                let flavor: i64 = cap
                     .name("flavor")
-                    .map_or(0i32, |x| x.as_str().parse::<i32>().unwrap());
-                let texture: i32 = cap
+                    .map_or(0i64, |x| x.as_str().parse::<i64>().unwrap());
+                let texture: i64 = cap
                     .name("texture")
-                    .map_or(0i32, |x| x.as_str().parse::<i32>().unwrap());
-                let calories: i32 = cap
+                    .map_or(0i64, |x| x.as_str().parse::<i64>().unwrap());
+                let calories: i64 = cap
                     .name("calories")
-                    .map_or(0i32, |x| x.as_str().parse::<i32>().unwrap());
+                    .map_or(0i64, |x| x.as_str().parse::<i64>().unwrap());
 
                 result.push(Ingredient::from_data(
                     name, capacity, durability, flavor, texture, calories,
@@ -72,7 +74,35 @@ fn format_input(input_str: &str) -> Vec<Ingredient> {
     result
 }
 
+struct Cookie {
+    recipe: Vec<(i64,Ingredient)>,
+    score: i64,
+}
+
+impl Cookie {
+    fn from_data(recipe: Vec<(i64,Ingredient)>, score: i64) -> Self {
+        Cookie {
+            recipe,
+            score,
+        }
+    }
+}
+
+fn solve_part_1(input_str: &str) {
+    let ingredients = format_input(input_str);
+    let cookies: Vec<Cookie> = Vec::new();
+    let mut partitions = Partitions::new(100);
+
+    while let Some(partition) = partitions.next() {
+        if partition.len() == ingredients.len() {
+            for i in 0..ingredients.len() {
+                
+            }
+        }
+    }
+}
+
 fn main() {
-    let ingredients = format_input(INPUT);
-    println!("{:?}", ingredients);
+    
+
 }
