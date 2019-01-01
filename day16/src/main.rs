@@ -34,7 +34,7 @@ impl Aunt {
             static ref RE_AKITAS: Regex = Regex::new(r"akitas: (?P<value>[0-9]+)").unwrap();
             static ref RE_VIZSLAS: Regex = Regex::new(r"vizslas: (?P<value>[0-9]+)").unwrap();
         }
-        
+
         Aunt {
             id: extract_value(input, &RE_ID).unwrap(),
             cars: extract_value(input, &RE_CARS),
@@ -51,16 +51,33 @@ impl Aunt {
     }
 
     fn is_compatible(&self, candidate: &Aunt) -> bool {
-        candidate.cars.unwrap_or(self.cars.unwrap()) == self.cars.unwrap() &&
-            candidate.cats.unwrap_or(self.cats.unwrap()) == self.cats.unwrap() &&
-            candidate.children.unwrap_or(self.children.unwrap()) == self.children.unwrap() &&
-            candidate.goldfish.unwrap_or(self.goldfish.unwrap()) == self.goldfish.unwrap() &&
-            candidate.perfumes.unwrap_or(self.perfumes.unwrap()) == self.perfumes.unwrap() &&
-            candidate.trees.unwrap_or(self.trees.unwrap()) == self.trees.unwrap() &&
-            candidate.samoyeds.unwrap_or(self.samoyeds.unwrap()) == self.samoyeds.unwrap() &&
-            candidate.pomeranians.unwrap_or(self.pomeranians.unwrap()) == self.pomeranians.unwrap() &&
-            candidate.akitas.unwrap_or(self.akitas.unwrap()) == self.akitas.unwrap() &&
-            candidate.vizslas.unwrap_or(self.vizslas.unwrap()) == self.vizslas.unwrap()
+        candidate.cars.unwrap_or(self.cars.unwrap()) == self.cars.unwrap()
+            && candidate.cats.unwrap_or(self.cats.unwrap()) == self.cats.unwrap()
+            && candidate.children.unwrap_or(self.children.unwrap()) == self.children.unwrap()
+            && candidate.goldfish.unwrap_or(self.goldfish.unwrap()) == self.goldfish.unwrap()
+            && candidate.perfumes.unwrap_or(self.perfumes.unwrap()) == self.perfumes.unwrap()
+            && candidate.trees.unwrap_or(self.trees.unwrap()) == self.trees.unwrap()
+            && candidate.samoyeds.unwrap_or(self.samoyeds.unwrap()) == self.samoyeds.unwrap()
+            && candidate.pomeranians.unwrap_or(self.pomeranians.unwrap())
+                == self.pomeranians.unwrap()
+            && candidate.akitas.unwrap_or(self.akitas.unwrap()) == self.akitas.unwrap()
+            && candidate.vizslas.unwrap_or(self.vizslas.unwrap()) == self.vizslas.unwrap()
+    }
+
+    fn is_compatible_2(&self, candidate: &Aunt) -> bool {
+        candidate.cars.unwrap_or(self.cars.unwrap()) == self.cars.unwrap()
+            && candidate.cats.unwrap_or(self.cats.unwrap() + 1) > self.cats.unwrap()
+            && candidate.children.unwrap_or(self.children.unwrap()) == self.children.unwrap()
+            && candidate.goldfish.unwrap_or(self.goldfish.unwrap() - 1) < self.goldfish.unwrap()
+            && candidate.perfumes.unwrap_or(self.perfumes.unwrap()) == self.perfumes.unwrap()
+            && candidate.trees.unwrap_or(self.trees.unwrap() + 1) > self.trees.unwrap()
+            && candidate.samoyeds.unwrap_or(self.samoyeds.unwrap()) == self.samoyeds.unwrap()
+            && candidate
+                .pomeranians
+                .unwrap_or(self.pomeranians.unwrap() - 1)
+                < self.pomeranians.unwrap()
+            && candidate.akitas.unwrap_or(self.akitas.unwrap()) == self.akitas.unwrap()
+            && candidate.vizslas.unwrap_or(self.vizslas.unwrap()) == self.vizslas.unwrap()
     }
 }
 
@@ -68,13 +85,13 @@ fn extract_value(input: &str, re: &Regex) -> Option<usize> {
     match re.captures(input) {
         Some(cap) => Some(
             cap.name("value")
-                .map_or(0usize, |m| m.as_str().parse::<usize>().unwrap())
+                .map_or(0usize, |m| m.as_str().parse::<usize>().unwrap()),
         ),
         None => None,
     }
 }
 
-fn solve_part_1(input_str: &str, aunt: Aunt) -> usize {
+fn solve_part_1(input_str: &str, aunt: &Aunt) -> usize {
     let mut aunts: Vec<Aunt> = Vec::new();
     let mut eliminated: Vec<bool> = Vec::new();
     for line in input_str.trim().lines() {
@@ -83,6 +100,23 @@ fn solve_part_1(input_str: &str, aunt: Aunt) -> usize {
 
     for i in 0..aunts.len() {
         let compatible = aunt.is_compatible(&aunts[i]);
+        eliminated.push(!compatible);
+        if compatible {
+            return aunts[i].id;
+        }
+    }
+    unreachable!("Couldn't find a match!");
+}
+
+fn solve_part_2(input_str: &str, aunt: &Aunt) -> usize {
+    let mut aunts: Vec<Aunt> = Vec::new();
+    let mut eliminated: Vec<bool> = Vec::new();
+    for line in input_str.trim().lines() {
+        aunts.push(Aunt::from_str(line));
+    }
+
+    for i in 0..aunts.len() {
+        let compatible = aunt.is_compatible_2(&aunts[i]);
         eliminated.push(!compatible);
         if compatible {
             return aunts[i].id;
@@ -104,8 +138,9 @@ fn main() {
         pomeranians: Some(3),
         akitas: Some(0),
         vizslas: Some(0),
-    };    
-    println!("Answer part 1: {}", solve_part_1(INPUT, ticker_tape));
+    };
+    println!("Answer part 1: {}", solve_part_1(INPUT, &ticker_tape));
+    println!("Answer part 2: {}", solve_part_2(INPUT, &ticker_tape));
 }
 
 #[cfg(test)]
