@@ -1,7 +1,7 @@
 #[macro_use]
 extern crate lazy_static;
-use regex::Regex;
 use integer_partitions::Partitions;
+use regex::Regex;
 
 const INPUT: &str = include_str!("../input.txt");
 
@@ -75,12 +75,12 @@ fn format_input(input_str: &str) -> Vec<Ingredient> {
 }
 
 struct Cookie {
-    recipe: Vec<(i64,Ingredient)>,
+    recipe: Vec<(i64, Ingredient)>,
     score: i64,
 }
 
 impl Cookie {
-    fn from_data(recipe: Vec<(i64,Ingredient)>) -> Self {
+    fn from_data(recipe: Vec<(i64, Ingredient)>) -> Self {
         let mut capacity_score: i64 = 0;
         let mut durability_score: i64 = 0;
         let mut flavor_score: i64 = 0;
@@ -92,16 +92,11 @@ impl Cookie {
             texture_score += amount * ingredient.texture;
         }
         let mut score: i64 = 0;
-        if capacity_score <= 0 || durability_score <= 0 || flavor_score <= 0 || texture_score <= 0 {
-            score = 0;
-        } else {
+        if capacity_score > 0 && durability_score > 0 && flavor_score > 0 && texture_score > 0 {
             score = capacity_score * durability_score * flavor_score * texture_score;
         }
-        
-        Cookie {
-            recipe,
-            score,
-        }
+
+        Cookie { recipe, score }
     }
 }
 
@@ -121,17 +116,16 @@ fn solve_part_1(input_str: &str) -> i64 {
     }
 
     let mut index: usize = 0;
-    let mut score: i64 = 0;    
-    for (i,cookie) in cookies.iter().enumerate() {
+    let mut score: i64 = 0;
+    for (i, cookie) in cookies.iter().enumerate() {
         if cookie.score > score {
             score = cookie.score;
             index = i;
         }
-    }    
+    }
     score
 }
 
 fn main() {
     println!("Answer part 1: {}", solve_part_1(INPUT));
-
 }
