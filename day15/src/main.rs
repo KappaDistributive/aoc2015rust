@@ -5,7 +5,7 @@ use integer_partitions::Partitions;
 
 const INPUT: &str = include_str!("../input.txt");
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 struct Ingredient {
     name: String,
     capacity: i64,
@@ -80,7 +80,24 @@ struct Cookie {
 }
 
 impl Cookie {
-    fn from_data(recipe: Vec<(i64,Ingredient)>, score: i64) -> Self {
+    fn from_data(recipe: Vec<(i64,Ingredient)>) -> Self {
+        let mut capacity_score: i64 = 0;
+        let mut durability_score: i64 = 0;
+        let mut flavor_score: i64 = 0;
+        let mut texture_score: i64 = 0;
+        for (amount, ingredient) in recipe.clone() {
+            capacity_score += amount * ingredient.capacity;
+            durability_score += amount * ingredient.durability;
+            flavor_score += amount * ingredient.flavor;
+            texture_score += amount * ingredient.texture;
+        }
+        let mut score: i64 = 0;
+        if capacity_score <= 0 || durability_score <= 0 || flavor_score <= 0 || texture_score <= 0 {
+            score = 0;
+        } else {
+            score = capacity_score * durability_score * flavor_score * texture_score;
+        }
+        
         Cookie {
             recipe,
             score,
@@ -88,21 +105,33 @@ impl Cookie {
     }
 }
 
-fn solve_part_1(input_str: &str) {
+fn solve_part_1(input_str: &str) -> i64 {
     let ingredients = format_input(input_str);
-    let cookies: Vec<Cookie> = Vec::new();
+    let mut cookies: Vec<Cookie> = Vec::new();
     let mut partitions = Partitions::new(100);
 
     while let Some(partition) = partitions.next() {
         if partition.len() == ingredients.len() {
+            let mut recipe: Vec<(i64, Ingredient)> = Vec::new();
             for i in 0..ingredients.len() {
-                
+                recipe.push((partition[i] as i64, ingredients[i].clone()));
             }
+            cookies.push(Cookie::from_data(recipe));
         }
     }
+
+    let mut index: usize = 0;
+    let mut score: i64 = 0;    
+    for (i,cookie) in cookies.iter().enumerate() {
+        if cookie.score > score {
+            score = cookie.score;
+            index = i;
+        }
+    }    
+    score
 }
 
 fn main() {
-    
+    println!("Answer part 1: {}", solve_part_1(INPUT));
 
 }
