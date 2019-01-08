@@ -66,7 +66,7 @@ impl GameOfLight {
                     _ => panic!("Invalid state detected at ({},{})", x, y),
                 }
             }
-        }        
+        }
         for (x, y) in toggle {
             self.toggle_state(x, y);
         }
@@ -135,6 +135,24 @@ fn solve_part_1(input: &str) -> usize {
     game.light_count()
 }
 
+fn corner_lights_on(game: &mut GameOfLight) {
+    game.set_state(0, 0, 1);
+    game.set_state(game.width - 1, 0, 1);
+    game.set_state(0, game.height - 1, 1);
+    game.set_state(game.width - 1, game.height - 1, 1);
+}
+
+fn solve_part_2(input: &str) -> usize {
+    let mut game: GameOfLight = GameOfLight::from_data(input);
+    for _ in 0..100 {
+        corner_lights_on(&mut game);
+        game.step();
+    }
+    corner_lights_on(&mut game);
+    game.light_count()
+}
+
 fn main() {
     println!("Answer part 1: {}", solve_part_1(INPUT));
+    println!("Answer part 2: {}", solve_part_2(INPUT));
 }
