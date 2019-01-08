@@ -1,0 +1,20 @@
+const INPUT: usize = 29000000;
+
+fn solve_part_1(input: usize) -> usize {
+    let mut index: usize = 0;
+    let mut temp: usize = 0;
+
+    while temp < input {
+        temp = 0;
+        index += 1;
+        for i in 1..=index {
+            if index % i == 0 {
+                temp += i * 10;
+            }
+        }
+    }
+    index
+}
+fn main() {
+    println!("Answer part 1: {}", solve_part_1(10));
+}
